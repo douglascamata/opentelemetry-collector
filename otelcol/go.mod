@@ -90,6 +90,7 @@ require (
 	go.opentelemetry.io/collector/pipeline/xpipeline v0.125.0 // indirect
 	go.opentelemetry.io/collector/processor/xprocessor v0.125.0 // indirect
 	go.opentelemetry.io/collector/receiver/xreceiver v0.125.0 // indirect
+	go.opentelemetry.io/collector/semconv v0.125.0 // indirect
 	go.opentelemetry.io/collector/service/hostcapabilities v0.125.0 // indirect
 	go.opentelemetry.io/contrib/bridges/otelzap v0.10.0 // indirect
 	go.opentelemetry.io/contrib/propagators/b3 v1.35.0 // indirect
@@ -156,6 +157,8 @@ replace go.opentelemetry.io/collector/config/configtelemetry => ../config/config
 replace go.opentelemetry.io/collector/processor => ../processor
 
 replace go.opentelemetry.io/collector/consumer => ../consumer
+
+replace go.opentelemetry.io/collector/semconv => ../semconv
 
 replace go.opentelemetry.io/collector/receiver => ../receiver
 

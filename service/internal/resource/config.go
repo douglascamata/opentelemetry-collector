@@ -7,9 +7,9 @@ import (
 	"github.com/google/uuid"
 	"go.opentelemetry.io/otel/attribute"
 	"go.opentelemetry.io/otel/sdk/resource"
-	semconv "go.opentelemetry.io/otel/semconv/v1.18.0"
 
 	"go.opentelemetry.io/collector/component"
+	semconv "go.opentelemetry.io/collector/semconv/v1.18.0"
 )
 
 // New resource from telemetry configuration.
@@ -23,22 +23,22 @@ func New(buildInfo component.BuildInfo, resourceCfg map[string]*string) *resourc
 		}
 	}
 
-	if _, ok := resourceCfg[string(semconv.ServiceNameKey)]; !ok {
+	if _, ok := resourceCfg[semconv.AttributeServiceName]; !ok {
 		// AttributeServiceName is not specified in the config. Use the default service name.
-		telAttrs = append(telAttrs, semconv.ServiceNameKey.String(buildInfo.Command))
+		telAttrs = append(telAttrs, attribute.String(semconv.AttributeServiceName, buildInfo.Command))
 	}
 
-	if _, ok := resourceCfg[string(semconv.ServiceInstanceIDKey)]; !ok {
+	if _, ok := resourceCfg[semconv.AttributeServiceInstanceID]; !ok {
 		// AttributeServiceInstanceID is not specified in the config. Auto-generate one.
 		instanceUUID, _ := uuid.NewRandom()
 		instanceID := instanceUUID.String()
-		telAttrs = append(telAttrs, semconv.ServiceInstanceIDKey.String(instanceID))
+		telAttrs = append(telAttrs, attribute.String(semconv.AttributeServiceInstanceID, instanceID))
 	}
 
-	if _, ok := resourceCfg[string(semconv.ServiceVersionKey)]; !ok {
+	if _, ok := resourceCfg[semconv.AttributeServiceVersion]; !ok {
 		// AttributeServiceVersion is not specified in the config. Use the actual
 		// build version.
-		telAttrs = append(telAttrs, semconv.ServiceVersionKey.String(buildInfo.Version))
+		telAttrs = append(telAttrs, attribute.String(semconv.AttributeServiceVersion, buildInfo.Version))
 	}
 	return resource.NewWithAttributes(semconv.SchemaURL, telAttrs...)
 }
