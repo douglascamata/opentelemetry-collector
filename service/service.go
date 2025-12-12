@@ -10,6 +10,7 @@ import (
 	"errors"
 	"fmt"
 	"runtime"
+	"strings"
 
 	config "go.opentelemetry.io/contrib/otelconf/v0.3.0"
 	noopmetric "go.opentelemetry.io/otel/metric/noop"
@@ -259,6 +260,12 @@ func (srv *Service) Start(ctx context.Context) error {
 	if srv.collectorConf != nil {
 		if err := srv.host.ServiceExtensions.NotifyConfig(ctx, srv.collectorConf); err != nil {
 			return err
+		}
+		fmt.Printf("notified config\n")
+		for uri, conf := range srv.collectorConf.ConfPerURI {
+			fmt.Printf("--------------------------------\n")
+			fmt.Printf("conf for %s:\n%s\n", uri, strings.TrimSpace(conf.String()))
+			fmt.Printf("--------------------------------\n")
 		}
 	}
 

@@ -165,6 +165,7 @@ func (mr *Resolver) Resolve(ctx context.Context) (*Conf, error) {
 
 	// Retrieves individual configurations from all URIs in the given order, and merge them in retMap.
 	retMap := New()
+	configPerURI := make(map[string]*Conf, len(mr.uris))
 	for _, uri := range mr.uris {
 		ret, err := mr.retrieveValue(ctx, uri)
 		if err != nil {
@@ -179,6 +180,7 @@ func (mr *Resolver) Resolve(ctx context.Context) (*Conf, error) {
 		if err := retMap.Merge(retCfgMap); err != nil {
 			return nil, err
 		}
+		configPerURI[uri.asString()] = retCfgMap
 	}
 
 	cfgMap := make(map[string]any)
@@ -191,6 +193,9 @@ func (mr *Resolver) Resolve(ctx context.Context) (*Conf, error) {
 		cfgMap[k] = escapeDollarSigns(val)
 	}
 	retMap = NewFromStringMap(cfgMap)
+	// I'm not sure if this is a nice way to do it. Any suggestions to improve it
+	// are welcome and highly appreciated.
+	retMap.ConfPerURI = configPerURI
 
 	// Apply the converters in the given order.
 	for _, confConv := range mr.converters {

@@ -9,6 +9,8 @@ import (
 	"reflect"
 
 	"github.com/knadh/koanf/maps"
+	"github.com/knadh/koanf/parsers/yaml"
+
 	"github.com/knadh/koanf/providers/confmap"
 	"github.com/knadh/koanf/v2"
 
@@ -32,6 +34,9 @@ type Conf struct {
 	// isNil is true if this Conf was created from a nil field, as opposed to an empty map.
 	// AllKeys must return an empty slice if this is true.
 	isNil bool
+
+	// ConfPerURI is a map of the Conf for each URI that was used to create this Conf.
+	ConfPerURI map[string]*Conf
 }
 
 // New creates a new empty confmap.Conf instance.
@@ -49,6 +54,14 @@ func NewFromStringMap(data map[string]any) *Conf {
 		_ = p.k.Load(confmap.Provider(data, KeyDelimiter), nil)
 	}
 	return p
+}
+
+func (l *Conf) String() string {
+	yamlBytes, err := l.k.Marshal(yaml.Parser())
+	if err != nil {
+		return ""
+	}
+	return string(yamlBytes)
 }
 
 // Unmarshal unmarshalls the config into a struct using the given options.

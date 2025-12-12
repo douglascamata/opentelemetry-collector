@@ -197,6 +197,8 @@ func (col *Collector) setupConfigurationComponents(ctx context.Context) error {
 	if err = conf.Marshal(cfg); err != nil {
 		return fmt.Errorf("could not marshal configuration: %w", err)
 	}
+	// This is dirty, yes. I accept ideas on how to make it better/nicer/cleaner.
+	conf.ConfPerURI = cfg.ConfMap.ConfPerURI
 
 	// Wrap the buildZapLogger to append LoggingOptions from collector settings,
 	// since service.Settings.LoggingOptions is deprecated.

@@ -8,6 +8,7 @@ import (
 	"fmt"
 
 	"go.opentelemetry.io/collector/component"
+	"go.opentelemetry.io/collector/confmap"
 	"go.opentelemetry.io/collector/service"
 	"go.opentelemetry.io/collector/service/pipelines"
 )
@@ -20,6 +21,9 @@ var (
 
 // Config defines the configuration for the various elements of collector or agent.
 type Config struct {
+	// ConfMap is a reference to the [confmap.Conf] that was used to create this Config.
+	ConfMap *confmap.Conf
+
 	// Receivers is a map of ComponentID to Receivers.
 	Receivers map[component.ID]component.Config `mapstructure:"receivers"`
 

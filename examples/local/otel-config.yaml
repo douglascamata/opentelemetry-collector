@@ -1,6 +1,6 @@
 extensions:
   zpages:
-    endpoint: localhost:55679
+    endpoint: ${env:MY_POD_IP}:55679
 
 receivers:
   otlp:

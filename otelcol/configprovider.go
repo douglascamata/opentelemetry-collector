@@ -64,6 +64,7 @@ func (cm *ConfigProvider) Get(ctx context.Context, factories Factories) (*Config
 	}
 
 	return &Config{
+		ConfMap:    conf,
 		Receivers:  cfg.Receivers.Configs(),
 		Processors: cfg.Processors.Configs(),
 		Exporters:  cfg.Exporters.Configs(),
